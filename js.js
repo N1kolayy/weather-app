@@ -1,3 +1,7 @@
+import condition from "./condition.js";
+
+console.log(condition)
+
 const apiKey = '28ce97c33ca344718a5145411233101'
 
 const header = document.querySelector('.header')
@@ -42,6 +46,8 @@ async function getWeather(city) {
 
 
 
+
+
 form.onsubmit = async function (e) {
     e.preventDefault()
     let city = input.value.trim()
@@ -54,11 +60,22 @@ form.onsubmit = async function (e) {
                 showError(data.error.message)
             } else {
                 removeCard()
+
+                console.log(data.current.condition.code)
+
+                const info = condition.find((obj) => obj.code === data.current.condition.code)
+                console.log(info)
+                console.log(info.languages[23]['day_text'])
+
+
                 const weatherData = {
                     name: data.location.name,
                     country: data.location.country,
                     temp: data.current.temp_c,
-                    condition: data.current.condition.text
+                    condition: data.current.is_day
+                       ? info.languages[23]['day_text']
+                       : info.languages[23]['night_text'],
+
                 }
 
                 showCard(weatherData)
